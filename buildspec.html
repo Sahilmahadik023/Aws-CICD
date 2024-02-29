@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+   pre_build:
+     commands:
+        - echo logging in to Amazon ECR...
+        - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 381492253724.dkr.ecr.eu-north-1.amazonaws.com
+        - echo Logged in to Amazon ECR successfully
+   build:
+     commands:
+         - echo Building Docker Image for Project1
+         - docker build -t project1 .
+         - echo Image built successfully
+   
+   post_build:
+     commands:
+         - echo Tagging project1 docker image
+         - docker tag project1:latest 381492253724.dkr.ecr.eu-north-1.amazonaws.com/project1:latest
+         - docker push 381492253724.dkr.ecr.eu-north-1.amazonaws.com/project1:latest
+         - echo Image is pushed Bravo...!!!!
